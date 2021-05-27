@@ -99,6 +99,14 @@ add_executable( ${PROJECT_NAME} ${SRC} )
 # Add include directory to use #include <PiCode.h>
 target_include_directories( ${PROJECT_NAME} PRIVATE libs/PiCode/src/ )
 
+# getopt is not part of ANSI C, is POSIX, not Windows
+if(MSVC)
+  # Add include directory to use #include <getopt.h> 
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  STATIC_GETOPT")
+  target_include_directories( ${PROJECT_NAME} PRIVATE C:/vcpkg/packages/getopt-win32_x86-windows/include )
+  #target_link_libraries( ${PROJECT_NAME} PUBLIC getopt )
+endif()
+
 # Add PiCode static library (libpicode.a) to link picoder executable
 target_link_libraries( ${PROJECT_NAME} PUBLIC picode )
 

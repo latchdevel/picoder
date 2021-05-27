@@ -1,0 +1,105 @@
+# This is the name of the workflow, visible on GitHub UI.
+name: 'Build tests'
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+  TARGET_TEST: picoder
+
+# Controls when the action will run. 
+# Here we tell GitHub to run the workflow when a commit.
+on:
+  push:
+    paths:
+      - 'src/**'
+      - 'libs/**'
+      - '.github/workflows/*.yml'
+      - 'CMakeList.txt'
+
+  pull_request:
+    paths:
+      - 'src/**'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+  
+    # This is the name of the job
+    name: 'Build for ${{ matrix.config.name }}'
+
+    # The CMake configure and build commands are platform agnostic and should work equally
+    # well on Windows, Linux or Mac. 
+    runs-on: ${{ matrix.config.os }}
+
+    # Job env var for cmake build directory
+    env:
+      BUILD_DIR: ${{ github.workspace }}/build
+
+    # Here we tell GitHub that the jobs must be determined
+    # dynamically depending on a matrix configuration.
+    strategy:
+      
+      # Set to false so that GitHub does not cancel all jobs
+      # in progress if any array job fails.
+      fail-fast: false
+
+      # The matrix will produce one job for each configuration:
+      matrix:
+        config:
+          - name: 'Linux'
+            os: 'ubuntu-latest'
+            bindir: 'echo "BIN_DIR=$BUILD_DIR" >> $GITHUB_ENV'
+          
+          - name: 'MacOS'
+            os: 'macos-latest'
+            bindir: 'echo "BIN_DIR=$BUILD_DIR" >> $GITHUB_ENV'
+  
+          - name: 'Windows'
+            os: 'windows-latest'
+            bindir: 'echo "BIN_DIR=$env:BUILD_DIR/$Env:BUILD_TYPE" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf-8 -Append'
+
+    # This is the list of steps this job will run.
+    steps:
+        # Clone repo using the checkout action.
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+        # Windows runner need install getopt
+      - name: Windows runner install getopt
+        if: runner.os == 'Windows' 
+        run: vcpkg install getopt
+
+      - name: Create Build Environment
+        # Some projects don't allow in-source building, so create a separate build directory
+        # We'll use this as our working directory for all subsequent commands
+        run: cmake -E make_directory ${{ env.BUILD_DIR }}
+
+      - name: Running CMake 
+        working-directory: ${{ env.BUILD_DIR }}
+        run: cmake .. -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+
+      - name: Build ${{ env.TARGET_TEST }}
+        working-directory: ${{ env.BUILD_DIR }}
+        # Execute the build.  You can specify a specific target with "--target <NAME>"
+        run: cmake --build . --config ${{ env.BUILD_TYPE }} --target ${{ env.TARGET_TEST }}
+
+        # Set BIN_DIR from matrix bindir command
+      - name: Setting the binaries directory
+        run: ${{ matrix.config.bindir }}
+
+        # Execute test
+      - name: Execution test ${{env.TARGET_TEST}}
+        run: ${{ env.BIN_DIR }}/${{ env.TARGET_TEST }} version
+
+        # Upload binary files to artifacts
+      - name: Upload compiled binaries to Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: "Binaries for ${{ matrix.config.name }}"
+          path: |
+                ${{ env.BIN_DIR }}/${{ env.TARGET_TEST }}*
+
