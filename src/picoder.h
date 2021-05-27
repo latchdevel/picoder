@@ -19,7 +19,7 @@
 #define PICODER_H
 
 #define MAYOR_VERSION 1
-#define MINOR_VERSION 0
+#define MINOR_VERSION 1
 
 #include <PiCode.h>
 #include "picoder-list.h"

@@ -44,7 +44,7 @@ int encode_cmd(int argc, char** argv){
     protocol_t* protocol                  = nullptr; 
     char*       json                      = nullptr; 
     char*       json_data                 = nullptr; 
-    uint16_t    pulses[MAX_ENCODE_PULSES] = {0};
+    uint32_t    pulses[MAX_ENCODE_PULSES] = {0};
     char        repeats                   =  0 ;
 
     bool show_train      = false;

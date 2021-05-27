@@ -8,10 +8,13 @@
 
 #include "picoder-convert.h"
 #include <getopt.h>
-#include <limits>
 
 #ifndef MAX_PULSES
 #define MAX_PULSES    255
+#endif
+
+#ifndef MAX_PULSE_LENGTH
+#define MAX_PULSE_LENGTH    100000UL
 #endif
 
 static struct option list_options[] = {
@@ -31,7 +34,7 @@ void convert_help(FILE* out){
 int convert_cmd(int argc, char** argv){
 
     char*     pi_string         = nullptr;
-    uint16_t  pulses[MAX_PULSES] = {0};
+    uint32_t  pulses[MAX_PULSES] = {0};
     int       n_pulses           =  0;
 
     int  error_flag = 0;
@@ -64,8 +67,8 @@ int convert_cmd(int argc, char** argv){
 
                         while (pulse != nullptr){
 
-                            if ((atoi(pulse) > 0 ) and  ((atoi(pulse) <= std::numeric_limits<typeof(pulses[0])>::max() ))) { 
-                                pulses[n_pulses++] = (uint16_t)atoi(pulse);
+                            if ((atol(pulse) > 0 ) and  ((uint32_t)atol(pulse) <= MAX_PULSE_LENGTH)) { 
+                                pulses[n_pulses++] = (uint32_t)atol(pulse);
                                 if (n_pulses >= MAX_PULSES ){
                                     pulse = nullptr;
                                     n_pulses = -1;
@@ -77,7 +80,7 @@ int convert_cmd(int argc, char** argv){
                             }else{
                                 pulse = nullptr;
                                 n_pulses = -1;
-                                fprintf(stderr,"error: pulses must be > 0 and <= %d\n",std::numeric_limits<typeof(pulses[0])>::max());
+                                fprintf(stderr,"error: pulses must be > 0 and <= %lu\n",MAX_PULSE_LENGTH);
                                 error_flag--;
                             }
                         }
