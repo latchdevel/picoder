@@ -65,7 +65,7 @@ int list_cmd(int argc, char** argv){
                     encode_only = true;
                     break;
                 case 'd':
-                    for (int i = 0; i<DEVTYPES and found == -1; i++){
+                    for (int i = 0; i<DEVTYPES && found == -1; i++){
                         if (strcasecmp(devtype[i],optarg)==0){
                             found = i;
                         }
@@ -122,8 +122,8 @@ int list_cmd(int argc, char** argv){
             printf("-----------------------------------------------------------------------------------\n");
             while (pnode != nullptr) {
                 listener = pnode->listener;
-                if (( encode_only == false ) or (listener->createCode!=nullptr) ){ 
-                    if ((devtypeflags_set == false) or ( devtypeflags[listener->devtype])){
+                if (( encode_only == false ) || (listener->createCode!=nullptr) ){ 
+                    if ((devtypeflags_set == false) || ( devtypeflags[listener->devtype])){
                         printf(" [%c]   %-20s %-10s",listener->createCode==nullptr ? ' ':'*',listener->id, devtype[listener->devtype]);
                         devices = listener->devices;
                         if (devices != nullptr){

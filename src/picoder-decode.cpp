@@ -64,7 +64,7 @@ int decode_cmd(int argc, char** argv){
 
                         while (pulse != nullptr){
 
-                            if ((atol(pulse) > 0 ) and  ((uint32_t)atol(pulse) <= MAX_PULSE_LENGTH)) { 
+                            if ((atol(pulse) > 0 ) && ((uint32_t)atol(pulse) <= MAX_PULSE_LENGTH)) { 
                                 pulses[n_pulses++] = (uint32_t)atol(pulse);
                                 if (n_pulses >= MAX_PULSES ){
                                     pulse = nullptr;

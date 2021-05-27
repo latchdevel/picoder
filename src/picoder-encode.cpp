@@ -59,7 +59,7 @@ int encode_cmd(int argc, char** argv){
 
             switch (ch) {
                 case 'p':
-                    if ( protocol == nullptr and json_data == nullptr ){
+                    if ((protocol == nullptr) && (json_data == nullptr)){
                         protocol = PiCode.findProtocol(optarg);
                         if (protocol == nullptr){
                             fprintf(stderr, "error: protocol '%s' invalid\n", optarg);
@@ -76,7 +76,7 @@ int encode_cmd(int argc, char** argv){
                     }
                     break;
                 case 'j':
-                    if (json == nullptr and json_data == nullptr){
+                    if ((json == nullptr) && (json_data == nullptr)){
                         if (json_validate(optarg)){
                             json = optarg;
                         }else{
@@ -89,7 +89,7 @@ int encode_cmd(int argc, char** argv){
                     }
                     break;
                 case 'f':
-                    if (json_data == nullptr and json == nullptr and protocol == nullptr){
+                    if ((json_data == nullptr) && (json == nullptr) && (protocol == nullptr)){
                         if (json_validate(optarg)){
 
                             /* decode as root json */
@@ -147,11 +147,11 @@ int encode_cmd(int argc, char** argv){
                     break;
                 case 'r':
                     if (repeats == 0){
-                        if ((atoi(optarg) > 0) and (atoi(optarg) < MAX_ENCODE_REPEATS )){
+                        if ((atoi(optarg) > 0) && (atoi(optarg) < MAX_ENCODE_REPEATS )){
                             repeats = (char)atoi(optarg);
                         }else{
                             fprintf(stderr,"error: repeat must be > 0 and < %d \n",MAX_ENCODE_REPEATS );
-                            repeats = -1;
+                            repeats = MAX_ENCODE_REPEATS;
                             error_flag--;                              
                         }
                     }else{
@@ -202,11 +202,11 @@ int encode_cmd(int argc, char** argv){
     
         }else{
  
-            if (  protocol == nullptr and json == nullptr and json_data == nullptr ){
+            if ((protocol == nullptr) && (json == nullptr) && (json_data == nullptr)){
                 fprintf(stderr,"error: -p protocol and -j json data or -f full json are required\n");
                 error_flag--;
             }else{
-                if ((protocol == nullptr or json == nullptr) and json_data == nullptr  ){
+                if (((protocol == nullptr) || (json == nullptr)) && (json_data == nullptr)){
                     fprintf(stderr,"error: -p protocol and -j json data are required\n");
                     error_flag--;                    
                 }
@@ -218,7 +218,7 @@ int encode_cmd(int argc, char** argv){
 
                 if (n_pulses >= 0 ){
 
-                    if (show_train or show_only_train){
+                    if (show_train || show_only_train){
                         printf("pulses[%d]={",n_pulses);
                         for (int i = 0; i<n_pulses; i++){
                             printf("%d",pulses[i]);
@@ -229,7 +229,7 @@ int encode_cmd(int argc, char** argv){
                             }
                         }
                     }
-                    if (not show_only_train){
+                    if (!show_only_train){
                         
                         char* picode_str = PiCode.pulseTrainToString(pulses,(unsigned int)n_pulses, (uint8_t)repeats);
 

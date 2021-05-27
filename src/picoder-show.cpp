@@ -50,7 +50,7 @@ int show_cmd(int argc, char** argv){
 
             switch (ch) {
                 case 'p':
-                    if ((error_flag == 0) and (protocol == nullptr) ){
+                    if ((error_flag == 0) && (protocol == nullptr) ){
                         protocol = PiCode.findProtocol(optarg);
                         if (protocol == nullptr){
                             fprintf(stderr, "error: protocol '%s' invalid\n", optarg);

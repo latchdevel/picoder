@@ -21,6 +21,15 @@
 #define MAYOR_VERSION 1
 #define MINOR_VERSION 1
 
+#include <stdio.h> 
+#include <stdlib.h>
+#include <string.h>
+#include <getopt.h>
+
+#ifdef _MSC_VER 
+#include <getsubopt.h>
+#endif
+
 #include <PiCode.h>
 #include "picoder-list.h"
 #include "picoder-show.h"
@@ -50,7 +59,7 @@ void show_version(){
 
     printf("picoder v%d.%d (%s)\n",MAYOR_VERSION, MINOR_VERSION, STRINGIFY(BUILD_VERSION));
     printf("Compiled at " __DATE__ " " __TIME__ " %s (%s)\n",STRINGIFY(BUILD_COMPILER), BUILD_TYPE );
-    printf("Copyright (c) 2021 Jorge Rivera.  All right reserved.\n");
+    printf("Copyright (c) 2021 Jorge Rivera. All right reserved.\n");
     printf("See https://github.com/latchdevel/picoder\n\n");
 
     printf("License GNU Lesser General Public License v3.0.\n");

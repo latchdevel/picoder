@@ -16,7 +16,6 @@
 */
 
 #include "picoder.h"
-#include <getopt.h>
 
 enum {
     LIST = 0,
@@ -33,18 +32,18 @@ enum {
 };
 
 char *const cmds[] = {
-    [LIST]      = (char*) "list",
-    [SHOW]      = (char*) "show",
-    [ENCODE]    = (char*) "encode",
-    [DECODE]    = (char*) "decode",
-    [CONVERT]   = (char*) "convert",
-    [VERSION]   = (char*) "version",  
-    [VERSION_v] = (char*) "-v",  
-    [VERSION__v]= (char*) "--version",  
-    [HELP]      = (char*) "help",
-    [HELP_h]    = (char*) "-h",
-    [HELP__h]   = (char*) "--help",
-     NULL
+    (char*) "list",
+    (char*) "show",
+    (char*) "encode",
+    (char*) "decode",
+    (char*) "convert",
+    (char*) "version",  
+    (char*) "-v",  
+    (char*) "--version",  
+    (char*) "help",
+    (char*) "-h",
+    (char*) "--help",
+    NULL
 };
 
 int main(int argc, char** argv){
@@ -58,7 +57,7 @@ int main(int argc, char** argv){
         char*  saved  =  argv[1];
         char** params = &argv[1];
 
-        switch (getsubopt (params, cmds, &cmd)){
+        switch (getsubopt(params, cmds, &cmd)){
             case LIST:
               result = list_cmd(n_args,params);
               break;

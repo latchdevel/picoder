@@ -73,8 +73,8 @@ elseif(MSVC)
   set(MSVC_DISABLED_WARNINGS_LIST
     "C4996" # warning C4996: 'may be unsafe/disable deprecation'
             # To disable deprecation, use _CRT_SECURE_NO_WARNINGS.
-  # "C4244" # warning C4244: '=': conversion from '__int64' to 'int', possible loss of data
-  # "C4267" # warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+    "C4244" # warning C4244: '=': conversion from '__int64' to 'int', possible loss of data
+    "C4267" # warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
   # "C4305" # warning C4305: '=': truncation from 'int' to 'uint16_t'
     "C5105" # warning C5105: macro expansion producing 'defined' has undefined behavior
     "C4201" # warning C4201: nonstandard extension used: nameless struct/union
@@ -93,19 +93,28 @@ add_subdirectory( libs/PiCode/ )
 # Set source directory for picoder sources
 AUX_SOURCE_DIRECTORY( src/ SRC ) 
 
-# Add picoder as executable
-add_executable( ${PROJECT_NAME} ${SRC} )
+# getopt is not part of ANSI C, is POSIX, not Windows
+if(MSVC)
+  set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -DSTATIC_GETOPT")
+  set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -DSTATIC_GETOPT")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Dstrcasecmp=_stricmp") 
+
+  # Add sources for getopt() and getsubopt()
+  AUX_SOURCE_DIRECTORY( libs/glibc/stdlib/ STDLIB ) 
+
+  # Add picoder as executable static link
+  add_executable( ${PROJECT_NAME} ${SRC} ${STDLIB} )
+
+  # Add include directory to use #include <getopt.h> and <getsubopt.h>
+  target_include_directories( ${PROJECT_NAME} PRIVATE libs/glibc/stdlib/ )
+
+else()
+  # Add picoder as executable
+  add_executable( ${PROJECT_NAME} ${SRC} )
+endif()
 
 # Add include directory to use #include <PiCode.h>
 target_include_directories( ${PROJECT_NAME} PRIVATE libs/PiCode/src/ )
-
-# getopt is not part of ANSI C, is POSIX, not Windows
-if(MSVC)
-  # Add include directory to use #include <getopt.h> 
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  STATIC_GETOPT")
-  target_include_directories( ${PROJECT_NAME} PRIVATE C:/vcpkg/packages/getopt-win32_x86-windows/include )
-  #target_link_libraries( ${PROJECT_NAME} PUBLIC getopt )
-endif()
 
 # Add PiCode static library (libpicode.a) to link picoder executable
 target_link_libraries( ${PROJECT_NAME} PUBLIC picode )
