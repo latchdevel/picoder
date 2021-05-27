@@ -40,19 +40,22 @@ set_property(
 SET(BUILD_COMPILER "${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}" )
 MESSAGE( STATUS "Compiler: " ${BUILD_COMPILER} )
 
-# Set default build type to "release" set -O3 -DNDEBUG
-set(DEFAULT_BUILD_TYPE "release")
-
-# Check if set and valid CMAKE_BUILD_TYPE var
+# Check if set CMAKE_BUILD_TYPE var
 if(NOT CMAKE_BUILD_TYPE)
+  # Set default build type to "release" set -O3 -DNDEBUG
+  set(DEFAULT_BUILD_TYPE "release")
   SET(CMAKE_BUILD_TYPE ${DEFAULT_BUILD_TYPE})
   MESSAGE( STATUS "Build type set to default: " ${CMAKE_BUILD_TYPE} )
 else()
+  # Check if set and valid CMAKE_BUILD_TYPE var
   STRING( TOLOWER "${CMAKE_BUILD_TYPE}" CMAKE_BUILD_TYPE )
   if((CMAKE_BUILD_TYPE STREQUAL "debug") OR (CMAKE_BUILD_TYPE STREQUAL "release"))
-    MESSAGE( STATUS "Build type set to: " ${CMAKE_BUILD_TYPE} )
+    # If no has parent directory show message
+    if(NOT hasParent)
+      MESSAGE( STATUS "Build type set to: " ${CMAKE_BUILD_TYPE} )
+    endif()
   else()
-  MESSAGE( FATAL_ERROR "If set CMAKE_BUILD_TYPE it must be Release or Debug")
+    MESSAGE( FATAL_ERROR "If set CMAKE_BUILD_TYPE it must be 'release' or 'debug'")
   endif()
 endif()
 
