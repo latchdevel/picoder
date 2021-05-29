@@ -3,6 +3,7 @@
 Simple standalone command line tool to decode and encode OOK protocols supported by [**"pilight"**](https://github.com/pilight/pilight) project.
 
 [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
+[![Build tests](https://github.com/latchdevel/picoder/actions/workflows/BuildTest.yml/badge.svg)](https://github.com/latchdevel/picoder/actions/workflows/BuildTest.yml)
 
 Based on [**PiCode library**](http://github.com/latchdevel/PiCode) that provide a standard C++ class to should help to implement IoT bridges between the RF 433/315MHz band and internet protocols.
 
