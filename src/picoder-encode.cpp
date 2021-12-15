@@ -231,7 +231,7 @@ int encode_cmd(int argc, char** argv){
                     }
                     if (!show_only_train){
                         
-                        char* picode_str = PiCode.pulseTrainToString(pulses,(unsigned int)n_pulses, (uint8_t)repeats);
+                        char* picode_str = PiCode.pulseTrainToString(pulses,(uint16_t)n_pulses, (uint8_t)repeats);
 
                         if (picode_str != nullptr){
                             printf("%s\n",picode_str);

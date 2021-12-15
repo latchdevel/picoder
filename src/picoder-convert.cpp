@@ -130,7 +130,7 @@ int convert_cmd(int argc, char** argv){
                 if (n_pulses > 0){
                     if (pi_string == nullptr){
                         // Provide pulse train to convert to pilight string
-                        pi_string = PiCode.pulseTrainToString(pulses,(unsigned)n_pulses);
+                        pi_string = PiCode.pulseTrainToString(pulses,(uint16_t)n_pulses);
                         if (pi_string != nullptr){
                             printf("%s\n",pi_string);
                             free(pi_string);
