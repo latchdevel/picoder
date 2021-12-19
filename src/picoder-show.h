@@ -10,6 +10,7 @@
 #define PICODER_SHOW_H
 
 #include <PiCode.h>
+#include <stdio.h>
 
 void show_help(FILE* out = stdout);
 

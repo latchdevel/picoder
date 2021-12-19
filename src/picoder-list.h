@@ -10,6 +10,7 @@
 #define PICODER_LIST_H
 
 #include <PiCode.h>
+#include <stdio.h>
 
 void list_help(FILE* out = stdout);
 

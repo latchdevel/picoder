@@ -9,6 +9,9 @@
 #include "picoder-list.h"
 #include <getopt.h>
 
+typedef size_t rsize_t;
+#include <string.h>
+
 #define DEVTYPES  17
 
 const char* devtype[DEVTYPES] = {  "raw",

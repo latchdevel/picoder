@@ -10,6 +10,7 @@
 #define PICODER_ENCODE_H
 
 #include <PiCode.h>
+#include <stdio.h>
 
 void encode_help(FILE* out = stdout);
 

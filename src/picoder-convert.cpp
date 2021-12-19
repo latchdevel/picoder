@@ -9,6 +9,9 @@
 #include "picoder-convert.h"
 #include <getopt.h>
 
+typedef size_t rsize_t;
+#include <string.h>
+
 #ifndef MAX_PULSES
 #define MAX_PULSES    255
 #endif

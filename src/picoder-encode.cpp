@@ -77,7 +77,7 @@ int encode_cmd(int argc, char** argv){
                     break;
                 case 'j':
                     if ((json == nullptr) && (json_data == nullptr)){
-                        if (json_validate(optarg)){
+                        if (cPiCode::json_validate(optarg)){
                             json = optarg;
                         }else{
                             fprintf(stderr,"error: json '%s' invalid\n",optarg);
@@ -90,14 +90,14 @@ int encode_cmd(int argc, char** argv){
                     break;
                 case 'f':
                     if ((json_data == nullptr) && (json == nullptr) && (protocol == nullptr)){
-                        if (json_validate(optarg)){
+                        if (cPiCode::json_validate(optarg)){
 
                             /* decode as root json */
-                            JsonNode* root_json = json_decode(optarg);
+                            cPiCode::JsonNode* root_json = cPiCode::json_decode(optarg);
                             if (root_json != nullptr){
 
                                 /* check for child */
-                                JsonNode* child_json = json_first_child(root_json);
+                                cPiCode::JsonNode* child_json = cPiCode::json_first_child(root_json);
                                 if (child_json != nullptr){            
                                 
                                     /* check for child key */
@@ -113,7 +113,7 @@ int encode_cmd(int argc, char** argv){
                                                 fprintf(stderr, "error: protocol '%s' no encode support\n", child_json->key);
                                                 error_flag--;                                
                                             }else{
-                                                json_data  = json_encode(child_json);
+                                                json_data  = cPiCode::json_encode(child_json);
                                                 if (json_data != nullptr){
                                                     json = json_data;
                                                 }else{
@@ -126,12 +126,12 @@ int encode_cmd(int argc, char** argv){
                                         fprintf(stderr, "error: full json child no key\n");
                                         error_flag--;
                                     }
-                                    json_delete(child_json);
+                                    cPiCode::json_delete(child_json);
                                 }else{
                                     fprintf(stderr, "error: full json no child\n");
                                     error_flag--;
                                 }
-                                json_delete(root_json); 
+                                cPiCode::json_delete(root_json); 
                             }else{
                                 fprintf(stderr, "error: full json decode fault\n");
                                 error_flag--;     

@@ -10,6 +10,7 @@
 #define PICODER_CONVERT_H
 
 #include <PiCode.h>
+#include <stdio.h>
 
 void convert_help(FILE* out = stdout);
 
