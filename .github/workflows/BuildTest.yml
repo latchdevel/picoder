@@ -14,7 +14,7 @@ on:
       - 'src/**'
       - 'libs/**'
       - '.github/workflows/*.yml'
-      - 'CMakeList.txt'
+      - 'CMakeLists.txt'
 
   pull_request:
     paths:
