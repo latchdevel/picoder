@@ -5,12 +5,12 @@
 # Copyright (c) 2021 Jorge Rivera. All right reserved.
 # License GNU Lesser General Public License v3.0.
 
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.14) # Update to prevent policy CMP0080 warning
 
 project(picoder)
 
 # Set C/C++ Standard
-set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD 11)    # Needed by glibc getopt in MSVC
 set(CMAKE_CXX_STANDARD 11)
 
 # Check for git repository information
@@ -67,7 +67,7 @@ endif()
 
 # Set C/C++ flags
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -Wall -Wextra -Wno-unused-parameter")
+  set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -Wall -Wextra -Wno-unused-parameter -fcommon") # Add -fcommon CFLAG to prevent multiple-definition
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-unused-parameter -Wconversion -Woverloaded-virtual -Wsign-conversion")
 elseif(MSVC)
   set(MSVC_DISABLED_WARNINGS_LIST
@@ -113,11 +113,36 @@ else()
   add_executable( ${PROJECT_NAME} ${SRC} )
 endif()
 
+# Add executable export symbols for loadable modules to prevent policy CMP0065 warning
+set_target_properties( ${PROJECT_NAME} PROPERTIES ENABLE_EXPORTS TRUE )
+
+set_target_properties( ${PROJECT_NAME} PROPERTIES POSITION_INDEPENDENT_CODE TRUE ) # Add -fPIC
+
+set_target_properties( ${PROJECT_NAME} PROPERTIES LINK_SEARCH_START_STATIC TRUE ) # Add "-Bstatic"
+
+# Build static executable if possible
+if( NOT (CMAKE_SYSTEM_NAME MATCHES "Darwin" OR MSVC) )
+  set( CMAKE_EXE_LINKER_FLAGS "-static" )
+endif()
+
+# Checking for math library 'libm' used when including <math.h> in pilight sources
+set(CMAKE_FIND_LIBRARY_SUFFIXES ".a;.lib;.tbd;.so;.dylib;.dll.a")
+find_library(MATH_LIBRARY NAMES m )
+if(MATH_LIBRARY)
+  MESSAGE( STATUS "Math library for ${PROJECT_NAME}: " ${MATH_LIBRARY} )
+else()
+  if(NOT MSVC)
+    message(FATAL_ERROR "Cannot find math library 'libm' ")
+  else()
+    set(MATH_LIBRARY "")
+  endif()
+endif()
+
 # Add include directory to use #include <PiCode.h>
 target_include_directories( ${PROJECT_NAME} PRIVATE libs/PiCode/src/ )
 
-# Add PiCode static library (libpicode.a) to link picoder executable
-target_link_libraries( ${PROJECT_NAME} PUBLIC picode )
+# Add PiCode and Math static libraries to link picoder executable
+target_link_libraries( ${PROJECT_NAME} PRIVATE picode ${MATH_LIBRARY})
 
 # If git info available adds to picoder executable as environment var
 if(DEFINED BUILD_VERSION)
