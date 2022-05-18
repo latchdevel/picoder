@@ -9,10 +9,10 @@
 #ifndef PICODER_SHOW_H
 #define PICODER_SHOW_H
 
-#include <PiCode.h>
+#include <cPiCode.h>
 #include <stdio.h>
 
-void show_help(FILE* out = stdout);
+void show_help(FILE* out);
 
 int show_cmd(int argc, char** argv);
 

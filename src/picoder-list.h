@@ -9,10 +9,10 @@
 #ifndef PICODER_LIST_H
 #define PICODER_LIST_H
 
-#include <PiCode.h>
+#include <cPiCode.h>
 #include <stdio.h>
 
-void list_help(FILE* out = stdout);
+void list_help(FILE* out);
 
 int list_cmd(int argc, char** argv);
 

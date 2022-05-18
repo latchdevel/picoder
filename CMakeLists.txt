@@ -7,11 +7,10 @@
 
 cmake_minimum_required(VERSION 3.14) # Update to prevent policy CMP0080 warning
 
-project(picoder)
+project(picoder C) # Pure C version
 
-# Set C/C++ Standard
+# Set C compiler standard
 set(CMAKE_C_STANDARD 11)    # Needed by glibc getopt in MSVC
-set(CMAKE_CXX_STANDARD 11)
 
 # Check for git repository information
 IF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.git)
@@ -36,9 +35,9 @@ set_property(
             .git/index
 )
 
-# Set complier identification
-SET(BUILD_COMPILER "${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}" )
-MESSAGE( STATUS "Compiler: " ${BUILD_COMPILER} )
+# Set C complier identification
+SET(BUILD_COMPILER "${CMAKE_C_COMPILER_ID} ${CMAKE_C_COMPILER_VERSION}" )
+MESSAGE( STATUS "C Compiler: " ${BUILD_COMPILER} )
 
 # Check if set CMAKE_BUILD_TYPE var
 if(NOT CMAKE_BUILD_TYPE)
@@ -61,14 +60,12 @@ endif()
 
 # Setting build type to "debug" add only -g 
 if(CMAKE_BUILD_TYPE STREQUAL "debug")
-  set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -DDEBUG")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEBUG")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DDEBUG")
 endif()
 
-# Set C/C++ flags
-if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -Wall -Wextra -Wno-unused-parameter -fcommon") # Add -fcommon CFLAG to prevent multiple-definition
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-unused-parameter -Wconversion -Woverloaded-virtual -Wsign-conversion")
+# Set C compiler flags
+if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_C_COMPILER_ID MATCHES "Clang")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Wno-unused-parameter -fcommon") # Add -fcommon CFLAG to prevent multiple-definition
 elseif(MSVC)
   set(MSVC_DISABLED_WARNINGS_LIST
     "C4996" # warning C4996: 'may be unsafe/disable deprecation'
@@ -83,23 +80,21 @@ elseif(MSVC)
     "C4706" # warning C4706: assignment within conditional expression
   )
   string(REPLACE "C" " -wd" MSVC_DISABLED_WARNINGS_STR ${MSVC_DISABLED_WARNINGS_LIST})
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -W4 ${MSVC_DISABLED_WARNINGS_STR}")
-  set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS}   -Wall -W4 ${MSVC_DISABLED_WARNINGS_STR}")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -W4 ${MSVC_DISABLED_WARNINGS_STR}")
 endif()
 
-# Add directory for PiCode library 
-add_subdirectory( libs/PiCode/ )
+# Add directory for cPiCode library only
+add_subdirectory( libs/PiCode/ EXCLUDE_FROM_ALL )
 
 # Set source directory for picoder sources
 AUX_SOURCE_DIRECTORY( src/ SRC ) 
 
 # getopt is not part of ANSI C, is POSIX, not Windows
 if(MSVC)
-  set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -DSTATIC_GETOPT")
-  set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -DSTATIC_GETOPT")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Dstrcasecmp=_stricmp") 
+  # Sorry for the static builds of getopt violate the Lesser GNU Public License
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSTATIC_GETOPT -Dstrcasecmp=_stricmp")
 
-  # Add sources for getopt() and getsubopt()
+  # Add sources for getopt() and getsubopt() friendly derivative for Microsoft Visual C
   AUX_SOURCE_DIRECTORY( libs/glibc/stdlib/ STDLIB ) 
 
   # Add picoder as executable static link
@@ -138,11 +133,11 @@ else()
   endif()
 endif()
 
-# Add include directory to use #include <PiCode.h>
+# Add include directory to use #include <cPiCode.h>
 target_include_directories( ${PROJECT_NAME} PRIVATE libs/PiCode/src/ )
 
-# Add PiCode and Math static libraries to link picoder executable
-target_link_libraries( ${PROJECT_NAME} PRIVATE picode ${MATH_LIBRARY})
+# Add cPiCode and Math static libraries to link picoder executable
+target_link_libraries( ${PROJECT_NAME} PRIVATE cpicode ${MATH_LIBRARY})
 
 # If git info available adds to picoder executable as environment var
 if(DEFINED BUILD_VERSION)

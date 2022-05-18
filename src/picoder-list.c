@@ -48,9 +48,9 @@ void list_help(FILE* out){
 
 int list_cmd(int argc, char** argv){
 
-    protocol_t*         listener = nullptr; 
-    protocol_devices_t* devices  = nullptr;
-    protocols_t*        pnode    = PiCode.usedProtocols();
+    protocol_t*         listener = NULL; 
+    protocol_devices_t* devices  = NULL;
+    protocols_t*        pnode    = pilight_protocols;
 
 
     bool devtypeflags[DEVTYPES] = {false};
@@ -118,26 +118,26 @@ int list_cmd(int argc, char** argv){
 
     if (help_flag){
         printf("command:\n");
-        list_help();
+        list_help(stdout);
     }else{
         if (error_flag==0){
             printf("Encode Protocol             Type      Devices\n");
             printf("-----------------------------------------------------------------------------------\n");
-            while (pnode != nullptr) {
+            while (pnode != NULL) {
                 listener = pnode->listener;
-                if (( encode_only == false ) || (listener->createCode!=nullptr) ){ 
+                if (( encode_only == false ) || (listener->createCode!=NULL) ){ 
                     if ((devtypeflags_set == false) || ( devtypeflags[listener->devtype])){
-                        printf(" [%c]   %-20s %-10s",listener->createCode==nullptr ? ' ':'*',listener->id, devtype[listener->devtype]);
+                        printf(" [%c]   %-20s %-10s",listener->createCode==NULL ? ' ':'*',listener->id, devtype[listener->devtype]);
                         devices = listener->devices;
-                        if (devices != nullptr){
+                        if (devices != NULL){
                             printf("%s\n",devices->desc);
                             devices = devices->next;
-                            while (devices != nullptr){
+                            while (devices != NULL){
                                 printf("%38s%s\n"," ",devices->desc);
                                 if (devices->next != devices){
                                     devices = devices->next;
                                 }else{
-                                    devices = nullptr;
+                                    devices = NULL;
                                     printf("\n");
                                 }
                             } 

@@ -84,11 +84,11 @@ int main(int argc, char** argv){
               printf("usage: %s <command> [options]\n",argv[0]);
               printf("commands:\n");
               printf("         help | -h | --help                           --> show help\n");
-              list_help();
-              show_help();
-              encode_help();
-              decode_help();
-              convert_help();
+              list_help(default_output);
+              show_help(default_output);
+              encode_help(default_output);
+              decode_help(default_output);
+              convert_help(default_output);
               printf("         version | -v | --version                     --> show version details\n");
               break;
             default:

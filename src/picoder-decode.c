@@ -6,7 +6,7 @@
     License GNU Lesser General Public License v3.0.
 */
 
-#include "picoder-convert.h"
+#include "picoder-decode.h"
 #include <getopt.h>
 
 typedef size_t rsize_t;
@@ -27,16 +27,15 @@ static struct option list_options[] = {
   { NULL, 0, NULL, 0 }
  };
 
-void convert_help(FILE* out){
-    fprintf(out,"         convert [-h] [ -s string | -t train ]        --> coverts from/to pilight string to/from pulse train\n");
-    fprintf(out,"                 [-h | --help]                        --> show command options\n");
-    fprintf(out,"                 [-s | --string piligth-string]       --> pilight string to convert\n");
-    fprintf(out,"                 [-t | --train pulse-train]           --> pulse train to convert\n");
+void decode_help(FILE* out){
+    fprintf(out,"         decode [-h] [ -s string | -t train ]         --> decode pilight string or pulse train\n");
+    fprintf(out,"                [-h | --help]                         --> show command options\n");
+    fprintf(out,"                [-s | --string piligth-string]        --> pilight string to decode\n");
+    fprintf(out,"                [-t | --train pulse-train]            --> pulse train to decode\n");
 }
 
-int convert_cmd(int argc, char** argv){
+int decode_cmd(int argc, char** argv){
 
-    char*     pi_string         = nullptr;
     uint32_t  pulses[MAX_PULSES] = {0};
     int       n_pulses           =  0;
 
@@ -50,12 +49,10 @@ int convert_cmd(int argc, char** argv){
             switch (ch) {
                 case 's':
                     if (n_pulses == 0){
-                        n_pulses = PiCode.stringToPulseTrain(optarg, pulses, MAX_PULSES);
+                        n_pulses = stringToPulseTrain(optarg, pulses, MAX_PULSES);
                         if (n_pulses <= 0){
                             fprintf(stderr,"error: string to pulse train (%d)\n",n_pulses);
                             error_flag--;  
-                        }else{
-                            pi_string = optarg;
                         }
                     }else{
                         fprintf(stderr,"error: only one pilight string is allowed\n");
@@ -68,12 +65,12 @@ int convert_cmd(int argc, char** argv){
                         char* pulse;
                         pulse = strtok(optarg,",");
 
-                        while (pulse != nullptr){
+                        while (pulse != NULL){
 
                             if ((atol(pulse) > 0 ) && ((uint32_t)atol(pulse) <= MAX_PULSE_LENGTH)) { 
                                 pulses[n_pulses++] = (uint32_t)atol(pulse);
                                 if (n_pulses >= MAX_PULSES ){
-                                    pulse = nullptr;
+                                    pulse = NULL;
                                     n_pulses = -1;
                                     fprintf(stderr,"error: too many pulses (max %d)\n",MAX_PULSES);
                                     error_flag--;
@@ -81,7 +78,7 @@ int convert_cmd(int argc, char** argv){
                                     pulse = strtok (NULL, ",");
                                 }
                             }else{
-                                pulse = nullptr;
+                                pulse = NULL;
                                 n_pulses = -1;
                                 fprintf(stderr,"error: pulses must be > 0 and <= %lu\n",MAX_PULSE_LENGTH);
                                 error_flag--;
@@ -125,34 +122,29 @@ int convert_cmd(int argc, char** argv){
 
         if (help_flag){
             printf("command:\n");
-            convert_help();
+            decode_help(stdout);
         }else{
 
             if (error_flag == 0) {
 
                 if (n_pulses > 0){
-                    if (pi_string == nullptr){
-                        // Provide pulse train to convert to pilight string
-                        pi_string = PiCode.pulseTrainToString(pulses,(uint16_t)n_pulses);
-                        if (pi_string != nullptr){
-                            printf("%s\n",pi_string);
-                            free(pi_string);
+
+                    char *json = decodePulseTrain(pulses, (uint8_t)n_pulses, "  ");
+
+                    if (json != NULL){
+                        if (strlen(json) > 4){  
+                            printf("%s\n",json);
                         }else{
-                            fprintf(stderr,"error: unable to encode pulse train\n");
-                            error_flag--;    
+                            // JSON emply '[]'
+                            fprintf(stderr,"error: unable to decode pulse train\n"); 
+                            error_flag--;                             
                         }
+                        free(json);
                     }else{
-                        // Provide pilight string to convert to pulse train
-                        printf("pulses[%d]={",n_pulses);
-                        for (int i = 0; i<n_pulses; i++){
-                            printf("%d",pulses[i]);
-                            if (i<n_pulses-1){
-                                printf(",");
-                            }else{
-                                printf("};\n");
-                            }
-                        }
+                        fprintf(stderr,"error: decode pulse train fails\n");
+                        error_flag--; 
                     }
+
                 }else{
                     fprintf(stderr,"error: invalid pulse train (%d)\n",n_pulses);
                     error_flag--;    

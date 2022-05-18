@@ -38,8 +38,8 @@ void show_help(FILE* out){
 
 int show_cmd(int argc, char** argv){
 
-    protocol_t*         protocol = nullptr; 
-    protocol_devices_t* devices  = nullptr;
+    protocol_t*         protocol = NULL; 
+    protocol_devices_t* devices  = NULL;
 
     int  error_flag = 0;
     bool help_flag  = false;
@@ -50,9 +50,9 @@ int show_cmd(int argc, char** argv){
 
             switch (ch) {
                 case 'p':
-                    if ((error_flag == 0) && (protocol == nullptr) ){
-                        protocol = PiCode.findProtocol(optarg);
-                        if (protocol == nullptr){
+                    if ((error_flag == 0) && (protocol == NULL) ){
+                        protocol = findProtocol(optarg);
+                        if (protocol == NULL){
                             fprintf(stderr, "error: protocol '%s' invalid\n", optarg);
                             error_flag--;
                         }
@@ -94,10 +94,10 @@ int show_cmd(int argc, char** argv){
 
         if (help_flag){
             printf("command:\n");
-            show_help();
+            show_help(stdout);
         }else{
 
-            if (protocol == nullptr){
+            if (protocol == NULL){
                 fprintf(stderr,"error: -p protocol is required\n");
                 error_flag--;
             }
@@ -105,15 +105,15 @@ int show_cmd(int argc, char** argv){
             if (error_flag==0){ 
 
                 printf("Protocol:    %s\n",protocol->id);   
-                printf("Encode:      %s\n",protocol->createCode==nullptr ? "Unsupported":"Supported");   
+                printf("Encode:      %s\n",protocol->createCode==NULL ? "Unsupported":"Supported");   
                 printf("Device type: %d (%s)\n",protocol->devtype,devtype[protocol->devtype]);  
                 devices = protocol->devices;
-                while (devices != nullptr){
+                while (devices != NULL){
                     printf("Devices:     %s\n",devices->desc);
                     if (devices->next != devices){
                         devices = devices->next;
                     }else{
-                        devices = nullptr;
+                        devices = NULL;
                     }
                 } 
 
@@ -138,12 +138,12 @@ int show_cmd(int argc, char** argv){
                     options_get_conftype(protocol->options, *option_id, 0, &option_conftype);
                     options_get_mask(protocol->options, *option_id, 0, option_mask);
                 
-                    printf("         (%s) %-12s  %2d  %2d   %s\n",*option_id,*option_name, option_argtype, option_conftype ,*option_mask==nullptr ? "":*option_mask);
+                    printf("         (%s) %-12s  %2d  %2d   %s\n",*option_id,*option_name, option_argtype, option_conftype ,*option_mask==NULL ? "":*option_mask);
 
                     option_index++;
                 }
                 
-                if (protocol->createCode!=nullptr){
+                if (protocol->createCode!=NULL){
                     printf("pilight-send:\n");
                     protocol->printHelp();
                 }

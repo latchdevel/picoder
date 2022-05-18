@@ -9,10 +9,10 @@
 #ifndef PICODER_DECODE_H
 #define PICODER_DECODE_H
 
-#include <PiCode.h>
+#include <cPiCode.h>
 #include <stdio.h>
 
-void decode_help(FILE* out = stdout);
+void decode_help(FILE* out);
 
 int decode_cmd(int argc, char** argv);
 

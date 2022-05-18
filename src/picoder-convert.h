@@ -9,10 +9,10 @@
 #ifndef PICODER_CONVERT_H
 #define PICODER_CONVERT_H
 
-#include <PiCode.h>
+#include <cPiCode.h>
 #include <stdio.h>
 
-void convert_help(FILE* out = stdout);
+void convert_help(FILE* out);
 
 int convert_cmd(int argc, char** argv);
 

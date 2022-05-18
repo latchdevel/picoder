@@ -19,18 +19,20 @@
 #define PICODER_H
 
 #define MAYOR_VERSION 1
-#define MINOR_VERSION 2
+#define MINOR_VERSION 3
 
 #include <stdio.h> 
 #include <stdlib.h>
 #include <string.h>
 #include <getopt.h>
 
+#define default_output stdout
+
 #ifdef _MSC_VER 
 #include <getsubopt.h>
 #endif
 
-#include <PiCode.h>
+#include <cPiCode.h>
 #include "picoder-list.h"
 #include "picoder-show.h"
 #include "picoder-encode.h"
@@ -57,20 +59,20 @@
 
 void show_version(){
 
-    /* Get PiCode library version (new from v1.2) */
-    char* picode_version = PiCode.getPiCodeVersion();
+    /* Get cPiCode library version (new from v1.2) */
+    char* picode_version = getPiCodeVersion();
 
     printf("picoder v%d.%d (%s)\n",MAYOR_VERSION, MINOR_VERSION, STRINGIFY(BUILD_VERSION));
     printf("Compiled at " __DATE__ " " __TIME__ " %s (%s)\n",STRINGIFY(BUILD_COMPILER), BUILD_TYPE );
     printf("PiCode library version: %s\n", picode_version ? picode_version : "unknow");
-    printf("Copyright (c) 2021 Jorge Rivera. All right reserved.\n");
+    printf("Copyright (c) 2021-2022 Jorge Rivera. All right reserved.\n");
     printf("See https://github.com/latchdevel/picoder\n\n");
 
     printf("License GNU Lesser General Public License v3.0.\n");
     printf("This is free software: you are free to change and redistribute it.\n");
     printf("There is NO WARRANTY, to the extent permitted by law.\n");
 
-    if (picode_version!=nullptr){
+    if (picode_version!=NULL){
         free(picode_version);
     }
 }

@@ -9,10 +9,10 @@
 #ifndef PICODER_ENCODE_H
 #define PICODER_ENCODE_H
 
-#include <PiCode.h>
+#include <cPiCode.h>
 #include <stdio.h>
 
-void encode_help(FILE* out = stdout);
+void encode_help(FILE* out);
 
 int encode_cmd(int argc, char** argv);
 

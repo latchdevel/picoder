@@ -41,9 +41,9 @@ void encode_help(FILE* out){
 
 int encode_cmd(int argc, char** argv){
 
-    protocol_t* protocol                  = nullptr; 
-    char*       json                      = nullptr; 
-    char*       json_data                 = nullptr; 
+    protocol_t* protocol                  = NULL; 
+    char*       json                      = NULL; 
+    char*       json_data                 = NULL; 
     uint32_t    pulses[MAX_ENCODE_PULSES] = {0};
     char        repeats                   =  0 ;
 
@@ -59,13 +59,13 @@ int encode_cmd(int argc, char** argv){
 
             switch (ch) {
                 case 'p':
-                    if ((protocol == nullptr) && (json_data == nullptr)){
-                        protocol = PiCode.findProtocol(optarg);
-                        if (protocol == nullptr){
+                    if ((protocol == NULL) && (json_data == NULL)){
+                        protocol = findProtocol(optarg);
+                        if (protocol == NULL){
                             fprintf(stderr, "error: protocol '%s' invalid\n", optarg);
                             error_flag--;
                         }else{
-                            if (protocol->createCode==nullptr){
+                            if (protocol->createCode==NULL){
                                 fprintf(stderr, "error: protocol '%s' no encode support\n", optarg);
                                 error_flag--;                                
                             }
@@ -76,8 +76,8 @@ int encode_cmd(int argc, char** argv){
                     }
                     break;
                 case 'j':
-                    if ((json == nullptr) && (json_data == nullptr)){
-                        if (cPiCode::json_validate(optarg)){
+                    if ((json == NULL) && (json_data == NULL)){
+                        if (json_validate(optarg)){
                             json = optarg;
                         }else{
                             fprintf(stderr,"error: json '%s' invalid\n",optarg);
@@ -89,32 +89,32 @@ int encode_cmd(int argc, char** argv){
                     }
                     break;
                 case 'f':
-                    if ((json_data == nullptr) && (json == nullptr) && (protocol == nullptr)){
-                        if (cPiCode::json_validate(optarg)){
+                    if ((json_data == NULL) && (json == NULL) && (protocol == NULL)){
+                        if (json_validate(optarg)){
 
                             /* decode as root json */
-                            cPiCode::JsonNode* root_json = cPiCode::json_decode(optarg);
-                            if (root_json != nullptr){
+                            JsonNode* root_json = json_decode(optarg);
+                            if (root_json != NULL){
 
                                 /* check for child */
-                                cPiCode::JsonNode* child_json = cPiCode::json_first_child(root_json);
-                                if (child_json != nullptr){            
+                                JsonNode* child_json = json_first_child(root_json);
+                                if (child_json != NULL){            
                                 
                                     /* check for child key */
-                                    if (child_json->key != nullptr){
+                                    if (child_json->key != NULL){
 
-                                        protocol = PiCode.findProtocol(child_json->key);
+                                        protocol = findProtocol(child_json->key);
 
-                                        if (protocol == nullptr){
+                                        if (protocol == NULL){
                                             fprintf(stderr, "error: protocol '%s' invalid\n", child_json->key);
                                             error_flag--;
                                         }else{
-                                            if (protocol->createCode==nullptr){
+                                            if (protocol->createCode==NULL){
                                                 fprintf(stderr, "error: protocol '%s' no encode support\n", child_json->key);
                                                 error_flag--;                                
                                             }else{
-                                                json_data  = cPiCode::json_encode(child_json);
-                                                if (json_data != nullptr){
+                                                json_data  = json_encode(child_json);
+                                                if (json_data != NULL){
                                                     json = json_data;
                                                 }else{
                                                     fprintf(stderr, "error: json data invalid\n");
@@ -126,12 +126,12 @@ int encode_cmd(int argc, char** argv){
                                         fprintf(stderr, "error: full json child no key\n");
                                         error_flag--;
                                     }
-                                    cPiCode::json_delete(child_json);
+                                    json_delete(child_json);
                                 }else{
                                     fprintf(stderr, "error: full json no child\n");
                                     error_flag--;
                                 }
-                                cPiCode::json_delete(root_json); 
+                                json_delete(root_json); 
                             }else{
                                 fprintf(stderr, "error: full json decode fault\n");
                                 error_flag--;     
@@ -198,15 +198,15 @@ int encode_cmd(int argc, char** argv){
 
         if (help_flag){
             printf("command:\n");
-            encode_help();
+            encode_help(stdout);
     
         }else{
  
-            if ((protocol == nullptr) && (json == nullptr) && (json_data == nullptr)){
+            if ((protocol == NULL) && (json == NULL) && (json_data == NULL)){
                 fprintf(stderr,"error: -p protocol and -j json data or -f full json are required\n");
                 error_flag--;
             }else{
-                if (((protocol == nullptr) || (json == nullptr)) && (json_data == nullptr)){
+                if (((protocol == NULL) || (json == NULL)) && (json_data == NULL)){
                     fprintf(stderr,"error: -p protocol and -j json data are required\n");
                     error_flag--;                    
                 }
@@ -214,7 +214,7 @@ int encode_cmd(int argc, char** argv){
 
             if (error_flag==0){ 
 
-                int n_pulses = PiCode.encodeToPulseTrain(pulses, protocol, json);
+                int n_pulses = encodeToPulseTrain(pulses, protocol, json);
 
                 if (n_pulses >= 0 ){
 
@@ -231,9 +231,9 @@ int encode_cmd(int argc, char** argv){
                     }
                     if (!show_only_train){
                         
-                        char* picode_str = PiCode.pulseTrainToString(pulses,(uint16_t)n_pulses, (uint8_t)repeats);
+                        char* picode_str = pulseTrainToString(pulses,(uint16_t)n_pulses, (uint8_t)repeats);
 
-                        if (picode_str != nullptr){
+                        if (picode_str != NULL){
                             printf("%s\n",picode_str);
                             free(picode_str);
                         }else{
