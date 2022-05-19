@@ -2,14 +2,14 @@
 
 Simple standalone command line tool to decode and encode OOK protocols supported by [**"pilight"**](https://github.com/pilight/pilight) project.
 
+Works on any libc/libc++ compatible system, like MacOS, FreeBSD, Linux, even Windows.
+
 [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
 [![Build tests](https://github.com/latchdevel/picoder/actions/workflows/BuildTest.yml/badge.svg)](https://github.com/latchdevel/picoder/actions/workflows/BuildTest.yml)
 
-Based on [**PiCode library**](http://github.com/latchdevel/PiCode) that provide a standard C++ class to should help to implement IoT bridges between the RF 433/315MHz band and internet protocols.
+Based on [**PiCode library**](http://github.com/latchdevel/PiCode) that provide a standard C/C++ library to should help to implement IoT bridges between the RF 433/315MHz band and internet protocols.
 
 A large number of wireless protocols of RC switches and weather stations using the 433/315Mhz radio frequency band via ASK/OOK pulse modulation are implemented by the excellent work of the "pilight" community. A list of supported protocols can be found in the pilight manual: https://manual.pilight.org/protocols/433.92/index.html
-
-No external depends, can run on any libc/libc++ compatible system, like MacOS, FreeBSD, Linux, even Windows.
 
 ## BUILD
  ```
@@ -104,82 +104,88 @@ $ picoder list
 
 Encode Protocol             Type      Devices
 -----------------------------------------------------------------------------------
- [*]   x10                  switch    x10 based devices
- [ ]   tfa30                weather   TFA 30.X Temp Hum Sensor
- [ ]   tfa                  weather   Globaltronics GT-WT-01 Weather Station
-                                      Freetec NC7104-675 Weather Station
-                                      SOENS Weather Stations
-                                      Conrad Weather Stations
-                                      TFA weather stations
- [ ]   teknihall            weather   Teknihall Weather Stations
- [*]   techlico_switch      switch    TechLiCo Lamp
- [ ]   tcm                  weather   TCM 218943 weather stations
- [*]   smartwares_switch    switch    Smartwares Switches
- [*]   silvercrest          switch    Silvercrest Switches
- [*]   selectremote         switch    SelectRemote Switches
- [ ]   secudo_smoke_sensor  alarm     Secudo/FlammEx smoke sensor
- [ ]   sc2262               contact   sc2262 contact sensor
- [*]   rsl366               switch    Pro MAX Switches
-                                      RSL366 Switches
- [*]   rc101                switch    rc102 Switches
-                                      rc101 Switches
- [*]   quigg_screen         screen    Quigg Switch Screen
- [*]   quigg_gt9000         switch    Quigg GT-9000 remote with GT-FSi-06 switches
- [*]   quigg_gt7000         switch    Quigg GT-7000 Switches
- [*]   quigg_gt1000         switch    Quigg GT-1000 protocol
- [*]   pollin               switch    Pollin Switches
- [ ]   nexus                weather   Sencor SWS 21TS Weather Stations
-                                      Digoo DG-R8H/DG-R8S Weather Stations
-                                      Nexus Weather Stations
- [*]   mumbi                switch    Mumbi Switches
- [*]   logilink_switch      switch    Logilink Switches
- [ ]   kerui_D026           contact   KERUI D026 Door sensor
- [ ]   iwds07               contact   Golden Security iwds07 contacts
- [*]   impuls               switch    Impuls Switches
- [*]   heitech              switch    Heitech series Switches
- [ ]   ev1527               contact   ev1527 contact sensor
- [*]   eurodomest_switch    switch    Eurodomest Switches
- [*]   elro_800_switch      switch    Maxi-Tronic FUNK-LIGHT switches
-                                      Brennenstuhl Comfort
-                                      Elro 800 series Switches
- [ ]   elro_800_contact     contact   Elro Series 800 Contact
- [*]   elro_400_switch      switch    Elro 400 Series Switches
- [*]   elro_300_switch      switch    Elro 300 Series Switches
- [*]   ehome                switch    eHome Switches
- [*]   daycom               switch    Daycom switches
- [*]   conrad_rsl_switch    switch    Conrad RSL Switches
- [ ]   conrad_rsl_contact   contact   Conrad RSL Contact Sensor
- [*]   cleverwatts          switch    Cleverwatts Switches
- [*]   clarus_switch        switch    Clarus Switches
- [*]   beamish_switch       switch    beamish_switch Switches
- [ ]   auriol               weather   Auriol Weather Stations
- [*]   arctech_switch_old   switch    Düwi Terminal Switches
-                                      Bye Bye Standby Switches
-                                      Old Intertechno Switches
-                                      Cogex Switches
-                                      Old KlikAanKlikUit Switches
- [*]   arctech_switch       switch    Intertechno Switches
-                                      CoCo Technologies Switches
-                                      Nexa Switches
-                                      D-IO Switches
-                                      KlikAanKlikUit Switches
- [*]   arctech_screen_old   screen    Old KlikAanKlikUit Screens
- [*]   arctech_screen       screen    DI-O Screens
-                                      KlikAanKlikUit Screens
- [ ]   arctech_motion       motion    KlikAanKlikUit Motion Sensor
- [ ]   arctech_dusk         dusk      KlikAanKlikUit Dusk Sensor
- [*]   arctech_dimmer       dimmer    KlikAanKlikUit Dimmers
- [ ]   arctech_contact      contact   D-IO Contact Sensor
-                                      KlikAanKlikUit Contact Sensor
+ [ ]   alecto_ws1700        weather   iBoutique Weather Stations
+                                      Alecto WS1700 Weather Stations
+ [ ]   alecto_wsd17         weather   Alecto WSD-17 Weather Stations
  [ ]   alecto_wx500         weather   Balance RF-WS105 Weather Stations
                                       Meteoscan W1XXX Weather Stations
                                       Hama EWS1500 Weather Stations
                                       Ventus WSXXX Weather Stations
                                       Auriol H13726 Weather Stations
                                       Alecto WX500 Weather Stations
- [ ]   alecto_wsd17         weather   Alecto WSD-17 Weather Stations
- [ ]   alecto_ws1700        weather   iBoutique Weather Stations
-                                      Alecto WS1700 Weather Stations
+ [ ]   arctech_contact      contact   D-IO Contact Sensor
+                                      KlikAanKlikUit Contact Sensor
+ [*]   arctech_dimmer       dimmer    KlikAanKlikUit Dimmers
+ [ ]   arctech_dusk         dusk      KlikAanKlikUit Dusk Sensor
+ [ ]   arctech_motion       motion    KlikAanKlikUit Motion Sensor
+ [*]   arctech_screen       screen    DI-O Screens
+                                      KlikAanKlikUit Screens
+ [*]   arctech_screen_old   screen    Old KlikAanKlikUit Screens
+ [*]   arctech_switch       switch    Intertechno Switches
+                                      CoCo Technologies Switches
+                                      Nexa Switches
+                                      D-IO Switches
+                                      KlikAanKlikUit Switches
+ [*]   arctech_switch_old   switch    Düwi Terminal Switches
+                                      Bye Bye Standby Switches
+                                      Old Intertechno Switches
+                                      Cogex Switches
+                                      Old KlikAanKlikUit Switches
+ [ ]   auriol               weather   Auriol Weather Stations
+ [*]   beamish_switch       switch    beamish_switch Switches
+ [*]   clarus_switch        switch    Clarus Switches
+ [*]   cleverwatts          switch    Cleverwatts Switches
+ [ ]   conrad_rsl_contact   contact   Conrad RSL Contact Sensor
+ [*]   conrad_rsl_switch    switch    Conrad RSL Switches
+ [*]   daycom               switch    Daycom switches
+ [*]   ehome                switch    eHome Switches
+ [*]   elro_300_switch      switch    Elro 300 Series Switches
+ [*]   elro_400_switch      switch    Elro 400 Series Switches
+ [ ]   elro_800_contact     contact   Elro Series 800 Contact
+ [*]   elro_800_switch      switch    Maxi-Tronic FUNK-LIGHT switches
+                                      Brennenstuhl Comfort
+                                      Elro 800 series Switches
+ [*]   eurodomest_switch    switch    Eurodomest Switches
+ [ ]   ev1527               contact   ev1527 contact sensor
+ [ ]   fanju                weather   Fanju 3378 Weather Stations
+ [*]   heitech              switch    Heitech series Switches
+ [*]   impuls               switch    Impuls Switches
+ [ ]   iwds07               contact   Golden Security iwds07 contacts
+ [ ]   kerui_D026           contact   KERUI D026 Door sensor
+ [*]   logilink_switch      switch    Logilink Switches
+ [*]   mumbi                switch    Mumbi Switches
+ [ ]   nexus                weather   Sencor SWS 21TS Weather Stations
+                                      Digoo DG-R8H/DG-R8S Weather Stations
+                                      Nexus Weather Stations
+ [ ]   ninjablocks_weather  weather   Ninjablocks Weather Sensors
+ [*]   pollin               switch    Pollin Switches
+ [*]   quigg_gt1000         switch    Quigg GT-1000 protocol
+ [*]   quigg_gt7000         switch    Quigg GT-7000 Switches
+ [*]   quigg_gt9000         switch    Quigg GT-9000 remote with GT-FSi-06 switches
+ [*]   quigg_screen         screen    Quigg Switch Screen
+ [*]   rc101                switch    rc102 Switches
+                                      rc101 Switches
+ [*]   rev1_switch          switch    Rev Switches v1
+ [*]   rev2_switch          switch    Rev Switches v2
+ [*]   rev3_switch          switch    Rev Switches v3
+ [*]   rsl366               switch    Pro MAX Switches
+                                      RSL366 Switches
+ [ ]   sc2262               contact   sc2262 contact sensor
+ [ ]   secudo_smoke_sensor  alarm     Secudo/FlammEx smoke sensor
+ [*]   selectremote         switch    SelectRemote Switches
+ [*]   silvercrest          switch    Silvercrest Switches
+ [*]   smartwares_switch    switch    Smartwares Switches
+ [ ]   tcm                  weather   TCM 218943 weather stations
+ [*]   techlico_switch      switch    TechLiCo Lamp
+ [ ]   teknihall            weather   Teknihall Weather Stations
+ [ ]   tfa2017              weather   TFA 30.X Temp Hum Sensor Revision 09/2017
+ [ ]   tfa30                weather   TFA 30.X Temp Hum Sensor
+ [ ]   tfa                  weather   Globaltronics GT-WT-01 Weather Station
+                                      Freetec NC7104-675 Weather Station
+                                      SOENS Weather Stations
+                                      Conrad Weather Stations
+                                      TFA weather stations
+ [*]   x10                  switch    x10 based devices
 ```
 
 ### Show protocol details:
@@ -213,7 +219,7 @@ pilight-send:
 - [ ] Support for [pilight-send](https://manual.pilight.org/programs/send.html) input format (pilight-send -p quigg_gt7000 -i 2816 -u 1 -f)
 
 # License
-Copyright (c) 2021 Jorge Rivera. All right reserved.
+Copyright (c) 2021-2022 Jorge Rivera. All right reserved.
 
 License GNU Lesser General Public License v3.0.
 
