@@ -50,7 +50,7 @@ int list_cmd(int argc, char** argv){
 
     protocol_t*         listener = NULL; 
     protocol_devices_t* devices  = NULL;
-    protocols_t*        pnode    = pilight_protocols;
+    protocols_t*        pnode    = usedProtocols();
 
 
     bool devtypeflags[DEVTYPES] = {false};
