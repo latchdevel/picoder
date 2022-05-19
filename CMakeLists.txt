@@ -125,9 +125,9 @@ set_target_properties( ${PROJECT_NAME} PROPERTIES POSITION_INDEPENDENT_CODE TRUE
 
 set_target_properties( ${PROJECT_NAME} PROPERTIES LINK_SEARCH_START_STATIC TRUE ) # Add "-Bstatic"
 
-# Build static executable if possible
-if( NOT (CMAKE_SYSTEM_NAME MATCHES "Darwin" OR MSVC) )
-  set( CMAKE_EXE_LINKER_FLAGS "-static" )
+# Build stripped static executable if possible
+if( (NOT (CMAKE_SYSTEM_NAME MATCHES "Darwin" OR MSVC)) AND (NOT (CMAKE_BUILD_TYPE STREQUAL "debug")))
+  set( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static -s" )
 endif()
 
 # Checking for math library 'libm' used when including <math.h> in pilight sources
