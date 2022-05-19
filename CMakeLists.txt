@@ -114,7 +114,12 @@ else()
 endif()
 
 # Add executable export symbols for loadable modules to prevent policy CMP0065 warning
-set_target_properties( ${PROJECT_NAME} PROPERTIES ENABLE_EXPORTS TRUE )
+# Basic check for BSD based systems, like as FreeBSD, NetBSD, OpenBSD, etc.
+string( TOUPPER ${CMAKE_SYSTEM_NAME} CMAKE_SYSTEM_NAME_UPPER )
+if(NOT CMAKE_SYSTEM_NAME_UPPER MATCHES "BSD")
+  # If not a BSD system, add executable export symbols for loadable modules. Add linker flag "-Wl,--export-dynamic"
+  set_target_properties( ${PROJECT_NAME} PROPERTIES ENABLE_EXPORTS TRUE )
+endif()
 
 set_target_properties( ${PROJECT_NAME} PROPERTIES POSITION_INDEPENDENT_CODE TRUE ) # Add -fPIC
 
