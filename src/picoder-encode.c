@@ -15,10 +15,6 @@
 #define MAX_ENCODE_REPEATS     32
 #endif
 
-#ifndef MAX_ENCODE_PULSES
-#define MAX_ENCODE_PULSES    255
-#endif
-
 static struct option list_options[] = {
   { "proto",      required_argument, NULL,      'p' },
   { "json",       required_argument, NULL,      'j' },
@@ -46,7 +42,7 @@ int encode_cmd(int argc, char** argv){
     protocol_t* protocol                  = NULL; 
     char*       json                      = NULL; 
     char*       json_data                 = NULL; 
-    uint32_t    pulses[MAX_ENCODE_PULSES] = {0};
+    uint32_t*   pulses                    = NULL;
     char        repeats                   =  0 ;
 
     bool show_train      = false;
@@ -216,37 +212,54 @@ int encode_cmd(int argc, char** argv){
 
             if (error_flag==0){ 
 
-                int n_pulses = encodeToPulseTrain(pulses, MAX_ENCODE_PULSES, protocol, json);
+                // Max possible number of pulses from protocol.h
+                uint16_t n_pulses_max = protocol_maxrawlen();
 
-                if (n_pulses >= 0 ){
+                // Dynamic array of pulses
+                pulses = (uint32_t*)malloc(sizeof *pulses * (n_pulses_max + 1));
 
-                    if (show_train || show_only_train){
-                        printf("pulses[%d]={",n_pulses);
-                        for (int i = 0; i<n_pulses; i++){
-                            printf("%d",pulses[i]);
-                            if (i<n_pulses-1){
-                                printf(",");
-                            }else{
-                                printf("};\n");
+                if (pulses != NULL){
+
+                    // Clean array of pulses
+                    for ( uint16_t i = 0; i < n_pulses_max; i++) pulses[i] = 0;
+
+                    int n_pulses = encodeToPulseTrain(pulses, n_pulses_max, protocol, json);
+
+                    if (n_pulses >= 0 ){
+
+                        if (show_train || show_only_train){
+                            printf("pulses[%d]={",n_pulses);
+                            for (int i = 0; i<n_pulses; i++){
+                                printf("%d",pulses[i]);
+                                if (i<n_pulses-1){
+                                    printf(",");
+                                }else{
+                                    printf("};\n");
+                                }
                             }
                         }
-                    }
-                    if (!show_only_train){
-                        
-                        char* picode_str = pulseTrainToString(pulses,(uint16_t)n_pulses, (uint8_t)repeats);
+                        if (!show_only_train){
+                            
+                            char* picode_str = pulseTrainToString(pulses,(uint16_t)n_pulses, (uint8_t)repeats);
 
-                        if (picode_str != NULL){
-                            printf("%s\n",picode_str);
-                            free(picode_str);
-                        }else{
-                            fprintf(stderr,"error: encoding pulse train");
-                            error_flag--; 
+                            if (picode_str != NULL){
+                                printf("%s\n",picode_str);
+                                free(picode_str);
+                            }else{
+                                fprintf(stderr,"error: encoding pulse train");
+                                error_flag--; 
+                            }
+                            
                         }
-                        
+                    }else{
+                        fprintf(stderr,"error: unable to encode (%d)\n",n_pulses);
+                        error_flag = n_pulses;
                     }
+                    // Free dynamic array of pulses
+                    free(pulses);
                 }else{
-                    fprintf(stderr,"error: unable to encode (%d)\n",n_pulses);
-                    error_flag = n_pulses;
+                    fprintf(stderr,"error: malloc(%lu) fail!\n",(sizeof *pulses * (n_pulses_max + 1)));
+                    error_flag--;
                 }
             }
         }
