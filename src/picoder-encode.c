@@ -9,6 +9,8 @@
 #include "picoder-encode.h"
 #include <getopt.h>
 
+#include <stdlib.h>
+
 #ifndef MAX_ENCODE_REPEATS
 #define MAX_ENCODE_REPEATS     32
 #endif
@@ -214,7 +216,7 @@ int encode_cmd(int argc, char** argv){
 
             if (error_flag==0){ 
 
-                int n_pulses = encodeToPulseTrain(pulses, protocol, json);
+                int n_pulses = encodeToPulseTrain(pulses, MAX_ENCODE_PULSES, protocol, json);
 
                 if (n_pulses >= 0 ){
 
