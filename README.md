@@ -74,13 +74,15 @@ picoder <command> [options]
 ```
 $ picoder decode -s "c:011010100101011010100110101001100110010101100110101010101010101012;p:1400,600,6800@"
 
-[{
-  "conrad_rsl_switch": {
-    "id": 1,
-    "unit": 2,
-    "state": "on"
-  }
-}]
+{
+  "protocols": [{
+    "conrad_rsl_switch": {
+      "id": 1,
+      "unit": 2,
+      "state": "on"
+    }
+  }]
+}
 ```
 
 ### Convert from pilight string to pulse train:
@@ -219,7 +221,7 @@ pilight-send:
 - [ ] Support for [pilight-send](https://manual.pilight.org/programs/send.html) input format (pilight-send -p quigg_gt7000 -i 2816 -u 1 -f)
 
 # License
-Copyright (c) 2021-2022 Jorge Rivera. All right reserved.
+Copyright (c) 2021-2024 Jorge Rivera. All right reserved.
 
 License GNU Lesser General Public License v3.0.
 

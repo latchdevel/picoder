@@ -11,7 +11,7 @@
 
     https://github.com/latchdevel/picoder
     
-    Copyright (c) 2021 Jorge Rivera. All right reserved.
+    Copyright (c) 2021-2024 Jorge Rivera. All right reserved.
     License GNU Lesser General Public License v3.0.
 */
 
@@ -19,7 +19,7 @@
 #define PICODER_H
 
 #define MAYOR_VERSION 1
-#define MINOR_VERSION 3
+#define MINOR_VERSION 4
 
 #include <stdio.h> 
 #include <stdlib.h>
@@ -65,7 +65,7 @@ void show_version(){
     printf("picoder v%d.%d (%s)\n",MAYOR_VERSION, MINOR_VERSION, STRINGIFY(BUILD_VERSION));
     printf("Compiled at " __DATE__ " " __TIME__ " %s (%s)\n",STRINGIFY(BUILD_COMPILER), BUILD_TYPE );
     printf("PiCode library version: %s\n", picode_version ? picode_version : "unknow");
-    printf("Copyright (c) 2021-2022 Jorge Rivera. All right reserved.\n");
+    printf("Copyright (c) 2021-2024 Jorge Rivera. All right reserved.\n");
     printf("See https://github.com/latchdevel/picoder\n\n");
 
     printf("License GNU Lesser General Public License v3.0.\n");
