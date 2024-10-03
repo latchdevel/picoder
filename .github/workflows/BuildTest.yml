@@ -68,7 +68,7 @@ jobs:
     steps:
         # Clone repo using the checkout action.
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           submodules: recursive
 
@@ -96,7 +96,7 @@ jobs:
 
         # Upload binary files to artifacts
       - name: Upload compiled binaries to Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: "Picoder binary for ${{ matrix.config.name }}"
           path: |
